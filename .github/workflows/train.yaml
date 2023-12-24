@@ -5,10 +5,7 @@ jobs:
     runs-on: [ubuntu-latest]
     container: docker://dvcorg/cml-py3:latest
     steps:
-      - uses: actions/setup-node@v1
-        with:
-          node-version: '16'
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v2
       - name: cml_run
         env:
           repo_token: ${{ secrets.TOKEN }}
@@ -20,5 +17,5 @@ jobs:
           dvc metrics diff --show-md master > report.md
 
           echo "## Validating results by region"
-          echo "![](./by_region.png)" >> report.md
-          cml comment create report.md
+          cml-publish by_region.png --md >> report.md
+          cml-send-comment report.md
